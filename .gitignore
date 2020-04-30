@@ -1,0 +1,17 @@
+#ignore files general
+**/.vscode
+**/.log
+**/.vagrant
+
+#security
+**/authorized_keys
+**/id_rsa.pub
+**/id_rsa
+**/rhel-subscription
+
+#erp
+**/*.rpo
+**/*.tar.gz
+
+security/rhel-subscription
+**/.vagrant
