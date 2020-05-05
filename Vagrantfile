@@ -97,7 +97,7 @@ Vagrant.configure("2") do |config|
     # config.vm.synced_folder "../data", "/vagrant_data"
     wordpress.vm.synced_folder ".", "/vagrant", disabled: true
     wordpress.vm.synced_folder "./security", "/home/vagrant/security"
-    wordpress.vm.synced_folder "./ansible", "/home/vagrant/ansible"
+    # wordpress.vm.synced_folder "./ansible", "/home/vagrant/ansible"
 
     # PROVIDER
 
@@ -134,8 +134,6 @@ Vagrant.configure("2") do |config|
     # SSH,FIREWALLD AND SELINUX
     wordpress.vm.provision "shell", inline: <<-SHELL
       cat /home/vagrant/security/id_rsa.pub >> .ssh/authorized_keys
-      chmod 600 /home/vagrant/security/id_rsa
-      chown vagrant:vagrant /home/vagrant/security/id_rsa
       sudo systemctl stop firewalld
       sudo systemctl disable firewalld
       sudo setenforce Permissive

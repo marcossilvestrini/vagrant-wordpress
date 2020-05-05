@@ -2,14 +2,13 @@
 - hosts: all
   tasks:
     - name: Install Epel and Rmi
-      dnf:
-        name: [
-          'https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm',
-          'http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm'
-        ]
-        state: installed
-      become: True
-      become_method: sudo
+      yum:
+        name: "{{ item }}"
+        state: present
+      become: yes
+      with_items:
+        - https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+        - http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
 
     - name: Import EPEL GPG key.
       rpm_key:
@@ -25,47 +24,45 @@
 
     - name: Set Rmi Version
       shell: dnf module enable php:remi-7.4 -y
-      warn: false
       become: yes
 
     - name: Install Packages
-      dnf:
-        state: installed
-        name: [
-        'php',
-        'php-cli',
-        'php-common',
-        'php-fpm',
-        'php-dom',
-        'php-simplexml',
-        'php-xml',
-        'php-xmlreader',
-        'php-curl',
-        'php-date',
-        'php-exif',
-        'php-filter',
-        'php-ftp',
-        'php-gd',
-        'php-hash',
-        'php-iconv',
-        'php-json',
-        'php-libxml',
-        'php-pecl-imagick',
-        'php-mbstring',
-        'php-mysqlnd',
-        'php-openssl',
-        'php-pcre',
-        'php-posix',
-        'php-sockets',
-        'php-spl',
-        'php-tokenizer',
-        'php-zlib',
-        'httpd',
-        'mysql-server',
-        'python3-PyMySQL'
-        ]
-      become: True
-      become_method: sudo
+      yum:
+        name: "{{ item }}"
+        state: latest
+      become: yes
+      with_items:
+        - php
+        - php-cli
+        - php-common
+        - php-fpm
+        - php-dom
+        - php-simplexml
+        - php-xml
+        - php-xmlreader
+        - php-curl
+        - php-date
+        - php-exif
+        - php-filter
+        - php-ftp
+        - php-gd
+        - php-hash
+        - php-iconv
+        - php-json
+        - php-libxml
+        - php-pecl-imagick
+        - php-mbstring
+        - php-mysqlnd
+        - php-openssl
+        - php-pcre
+        - php-posix
+        - php-sockets
+        - php-spl
+        - php-tokenizer
+        - php-zlib
+        - httpd
+        - mysql-server
+        - python3-PyMySQL
 
     - name: Change file ownership, group and permissions for php
       file:
