@@ -20,10 +20,6 @@ Vagrant.configure("2") do |config|
   config.vm.box = "centos/8"
   config.vm.box_version = "1905.1"
 
-  # config.ssh.username = "vagrant"
-  # config.ssh.password = "vagrant"
-  # config.ssh.forward_agent = true
-
   #VM wordpress
   config.vm.define "wordpress" do |wordpress|
 
@@ -97,6 +93,7 @@ Vagrant.configure("2") do |config|
     # config.vm.synced_folder "../data", "/vagrant_data"
     wordpress.vm.synced_folder ".", "/vagrant", disabled: true
     wordpress.vm.synced_folder "./security", "/home/vagrant/security"
+    wordpress.vm.synced_folder "./configs", "/home/vagrant/configs"
     # wordpress.vm.synced_folder "./ansible", "/home/vagrant/ansible"
 
     # PROVIDER
@@ -142,7 +139,7 @@ Vagrant.configure("2") do |config|
     # INSTALL UPDATES
     # wordpress.vm.provision "shell",
       # inline: "sudo yum update -y"
-    # INSTALL PACKAGES /php7 - https://www.cloudbooklet.com/install-php-7-4-on-centos-8-or-rhel-8/
+
 
      # INSTALL PACKAGES WITH ANSIBLE
     wordpress.vm.provision "ansible" do |ansible|

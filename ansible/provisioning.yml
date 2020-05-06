@@ -1,5 +1,12 @@
 ---
 - hosts: all
+  handlers:
+    - name: restart apache
+      service:
+        name: httpd.service
+        state: restarted
+      become: yes
+
   tasks:
     - name: Install Epel and Rmi
       dnf:
@@ -8,8 +15,7 @@
           'http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm'
         ]
         state: installed
-      become: True
-      become_method: sudo
+      become: yes
 
     - name: Import EPEL GPG key.
       rpm_key:
@@ -25,7 +31,6 @@
 
     - name: Set Rmi Version
       shell: dnf module enable php:remi-7.4 -y
-      warn: false
       become: yes
 
     - name: Install Packages
@@ -64,10 +69,9 @@
         'mysql-server',
         'python3-PyMySQL'
         ]
-      become: True
-      become_method: sudo
+      become: yes
 
-    - name: Change file ownership, group and permissions for php
+    - name: Change file ownership, group and permissions vagrant for php
       file:
         path: /var/www/html/
         owner: vagrant
@@ -75,27 +79,30 @@
         mode: "0775"
       become: yes
 
+    - name: Change file ownership, group and permissions vagrant for Apache
+      file:
+        path: /etc/httpd/conf/httpd.conf
+        owner: vagrant
+        group: vagrant
+      become: yes
+
     - name: Set php test file
       shell: echo '<?php phpinfo();' >/var/www/html/info.php
       become: yes
 
-    - name: Start Services
+    - name: Ensure Mysql is Running
       service:
-        name: "{{ item }}"
-        state: restarted
-        enabled: yes
+        name: mysqld
+        state: started
       become: yes
-      with_items:
-        - httpd
-        - mysqld
 
-    - name: "Create Database MySQL"
+    - name: Create Database MySQL
       mysql_db:
         name: wordpress_db
         login_user: root
         state: present
 
-    - name: "Create User MySQL"
+    - name: Create User MySQL
       mysql_user:
         login_user: root
         name: wordpress_user
@@ -111,20 +118,27 @@
     - name: Extract wordpress files
       unarchive:
         src: /tmp/wordpress.tar.gz
-        dest: /var/www/
+        dest: /var/www/html
         remote_src: yes
       become: yes
 
     - name: Copy File Wordpress Config
       copy:
-        src: "/var/www/wordpress/wp-config-sample.php"
-        dest: "/var/www/wordpress/wp-config.php"
+        src: "/var/www/html/wordpress/wp-config-sample.php"
+        dest: "/var/www/html/wordpress/wp-config.php"
         remote_src: yes
+      become: yes
+
+    - name: Change file permissions for wordpress
+      file:
+        path: /var/www/html/wordpress
+        owner: apache
+        recurse: yes
       become: yes
 
     - name: Configure the wp-config with input database
       replace:
-        path: "/var/www/wordpress/wp-config.php"
+        path: "/var/www/html/wordpress/wp-config.php"
         regexp: "{{ item.regex }}"
         replace: "{{ item.value }}"
       with_items:
@@ -132,3 +146,10 @@
         - { regex: "username_here", value: "wordpress_user" }
         - { regex: "password_here", value: "12345" }
       become: yes
+
+    - name: Configure Apache for serve Wordpress
+      copy:
+        src: '../configs/httpd.conf'
+        dest: '/etc/httpd/conf/httpd.conf'
+      become: yes
+      notify: restart apache
