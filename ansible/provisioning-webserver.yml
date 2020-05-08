@@ -113,10 +113,10 @@
         regexp: "{{ item.regex }}"
         replace: "{{ item.value }}"
       with_items:
-        - { regex: "localhost", value: "192.168.0.134" }
-        - { regex: "database_name_here", value: "wordpress_db" }
-        - { regex: "username_here", value: "wordpress_user" }
-        - { regex: "password_here", value: "12345" }
+        - { regex: "localhost", value: "{{ wp_db_ip }}"}
+        - { regex: "database_name_here", value: "{{wp_db_name}}" }
+        - { regex: "username_here", value: "{{ wp_db_username }}" }
+        - { regex: "password_here", value: "{{ wp_db_password }}" }
       become: yes
 
     - name: Change file permissions for wordpress
@@ -130,5 +130,5 @@
       copy:
         src: '../configs/httpd.conf'
         dest: '/etc/httpd/conf/httpd.conf'
-      become: yes
       notify: restart apache
+      become: yes
