@@ -64,13 +64,13 @@ Vagrant.configure("2") do |config|
       sudo setenforce Permissive
       SHELL
 
-    # INSTALL UPDATES
-    # mysql.vm.provision "shell",
-      # inline: "sudo yum update -y"
+    mysql.vm.provision "shell",inline: <<-SHELL
+    #sudo yum update -y
+    dnf install python3 -y
+    SHELL
 
-     # INSTALL PACKAGES WITH ANSIBLE
     mysql.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/provisioning-db.yml"
+      ansible.playbook = "ansible/playbook-db.yml"
     end
 
   end
@@ -109,13 +109,15 @@ Vagrant.configure("2") do |config|
       sudo setenforce Permissive
       SHELL
 
-    # INSTALL UPDATES
-    # wordpress.vm.provision "shell",
-      # inline: "sudo yum update -y"
+    # INSTALL UPDATES AND TOOLS
+    wordpress.vm.provision "shell",inline: <<-SHELL
+    #sudo yum update -y
+    dnf install python3 -y
+    SHELL
 
      # INSTALL PACKAGES WITH ANSIBLE
     wordpress.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/provisioning-webserver.yml"
+      ansible.playbook = "ansible/playbook-wordpress.yml"
     end
 
   end

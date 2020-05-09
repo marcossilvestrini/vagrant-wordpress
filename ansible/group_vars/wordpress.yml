@@ -2,7 +2,4 @@
 http_path: /var/www/html
 http_conf: /etc/httpd/conf/httpd.conf
 wp_path: /var/www/html/wordpress
-wp_db_ip: 192.168.0.134
-wp_db_name: wordpress_db
-wp_db_username: wordpress_user
-wp_db_password: wordpress123
+wp_db_ip: '192.168.0.134'

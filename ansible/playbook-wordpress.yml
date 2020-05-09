@@ -1,4 +1,3 @@
----
 - hosts: wordpress
   handlers:
     - name: restart apache
