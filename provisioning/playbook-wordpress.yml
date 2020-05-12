@@ -83,10 +83,6 @@
         group: vagrant
       become: yes
 
-    - name: Set php test file
-      shell: echo '<?php phpinfo();' >/var/www/html/info.php
-      become: yes
-
     - name: Download wordpress
       get_url:
         url: https://wordpress.org/latest.tar.gz
@@ -126,8 +122,8 @@
       become: yes
 
     - name: Configure Apache for serve Wordpress
-      copy:
-        src: '../configs/httpd.conf'
-        dest: '/etc/httpd/conf/httpd.conf'
-      notify: restart apache
+      template:
+        src: 'templates/httpd.conf.j2'
+        dest: "{{ http_conf }}"
       become: yes
+      notify: restart apache

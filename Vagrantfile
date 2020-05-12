@@ -70,7 +70,8 @@ Vagrant.configure("2") do |config|
     SHELL
 
     mysql.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/playbook-db.yml"
+      ansible.playbook = "provisioning/playbook-db.yml"
+
     end
 
   end
@@ -117,7 +118,7 @@ Vagrant.configure("2") do |config|
 
      # INSTALL PACKAGES WITH ANSIBLE
     wordpress.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/playbook-wordpress.yml"
+      ansible.playbook = "provisioning/playbook-wordpress.yml"
     end
 
   end

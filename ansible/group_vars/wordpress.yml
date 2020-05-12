@@ -1,5 +1,0 @@
----
-http_path: /var/www/html
-http_conf: /etc/httpd/conf/httpd.conf
-wp_path: /var/www/html/wordpress
-wp_db_ip: '192.168.0.134'
