@@ -1,0 +1,123 @@
+---
+- name: Install Epel and Rmi
+  dnf:
+    name:
+      [
+        'https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm',
+        'http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm',
+      ]
+    state: installed
+  become: yes
+
+- name: Import EPEL GPG key.
+  rpm_key:
+    key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+    state: present
+  become: yes
+
+- name: Import remi GPG key.
+  rpm_key:
+    key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+    state: present
+  become: yes
+
+- name: Set Rmi Version
+  shell: dnf module enable php:remi-7.4 -y
+  become: yes
+
+- name: Install Packages
+  dnf:
+    state: installed
+    name:
+      [
+        'php',
+        'php-cli',
+        'php-common',
+        'php-fpm',
+        'php-dom',
+        'php-simplexml',
+        'php-xml',
+        'php-xmlreader',
+        'php-curl',
+        'php-date',
+        'php-exif',
+        'php-filter',
+        'php-ftp',
+        'php-gd',
+        'php-hash',
+        'php-iconv',
+        'php-json',
+        'php-libxml',
+        'php-pecl-imagick',
+        'php-mbstring',
+        'php-mysqlnd',
+        'php-openssl',
+        'php-pcre',
+        'php-posix',
+        'php-sockets',
+        'php-spl',
+        'php-tokenizer',
+        'php-zlib',
+        'httpd',
+      ]
+  become: yes
+
+- name: Change file ownership, group and permissions vagrant for php
+  file:
+    path: '{{ http_path }}'
+    owner: vagrant
+    group: vagrant
+    mode: '0775'
+  become: yes
+
+- name: Change file ownership, group and permissions vagrant for Apache
+  file:
+    path: '{{ http_conf }}'
+    owner: vagrant
+    group: vagrant
+  become: yes
+
+- name: Change file permissions for wordpress
+  file:
+    path: '{{ wp_path }}'
+    owner: apache
+    recurse: yes
+  become: yes
+
+- name: Download wordpress
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp/wordpress.tar.gz
+
+- name: Extract wordpress files
+  unarchive:
+    src: /tmp/wordpress.tar.gz
+    dest: '{{ http_path }}'
+    remote_src: yes
+  become: yes
+
+- name: Copy File Wordpress Config
+  copy:
+    src: '{{ wp_path }}/wp-config-sample.php'
+    dest: '{{ wp_path }}/wp-config.php'
+    remote_src: yes
+  become: yes
+
+- name: Configure the wp-config with input database
+  replace:
+    path: '{{ wp_path }}/wp-config.php'
+    regexp: '{{ item.regex }}'
+    replace: '{{ item.value }}'
+  with_items:
+    - { regex: 'localhost', value: '{{ wp_db_ip }}' }
+    - { regex: 'database_name_here', value: '{{wp_db_name}}' }
+    - { regex: 'username_here', value: '{{ wp_db_username }}' }
+    - { regex: 'password_here', value: '{{ wp_db_password }}' }
+  become: yes
+
+- name: Configure Apache for serve Wordpress
+  template:
+    src: 'templates/httpd.conf.j2'
+    dest: '{{ http_conf }}'
+  become: yes
+  notify: restart apache

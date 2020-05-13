@@ -1,0 +1,37 @@
+---
+- name: Install Packages
+  dnf:
+    state: installed
+    name: ['mysql-server', 'python3-PyMySQL']
+  become: yes
+
+- name: Ensure Mysql is Running
+  service:
+    name: mysqld
+    state: started
+  become: yes
+
+- name: Create Database MySQL
+  mysql_db:
+    name: '{{wp_db_name}}'
+    login_user: root
+    state: present
+
+- name: Create User MySQL
+  mysql_user:
+    login_user: root
+    name: '{{wp_db_username }}'
+    password: '{{ wp_db_password }}'
+    priv: '{{wp_db_name}}.*:ALL'
+    state: present
+    host: '{{ item }}'
+  with_items:
+    - 'localhost'
+    - '127.0.0.1'
+    - '{{ wp_host_ip }}'
+
+- name: 'Configure MySQL for Allow Remote Connections'
+  copy:
+    src: 'files/my.cnf'
+    dest: '/etc/my.cnf'
+  become: yes
