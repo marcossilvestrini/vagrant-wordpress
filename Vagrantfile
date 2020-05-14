@@ -92,8 +92,6 @@ Vagrant.configure("2") do |config|
     # MOUNTS
     wordpress.vm.synced_folder ".", "/vagrant", disabled: true
     wordpress.vm.synced_folder "./security", "/home/vagrant/security"
-    wordpress.vm.synced_folder "./configs", "/home/vagrant/configs"
-
     # PROVIDER
     wordpress.vm.provider "virtualbox" do |vb|
       vb.name = "centos8-wordpress"
