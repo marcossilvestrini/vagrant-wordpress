@@ -1,4 +1,4 @@
-## Provision VM for Developer with Wordpress
+# Provision VM for Developer with Wordpress
 
 ## Getting Started
 
@@ -49,3 +49,24 @@
     Configure Firewall (firewalld or iptables)
     Configure Selinux
     Install Updates
+    Install Python 3
+
+## Provisioning (Ansible)
+
+### Role mysql
+
+    Install Mysql and packages
+    Create database
+    Create User
+    Configure Mysql
+
+### Role webserver
+
+    Set default repositories for download packages(Epel\RMI)
+    Install Apache , PHP and packages
+    Configure Apache and PHP
+
+### Role wordpress
+
+    Install Wordpress
+    Configure Wordpress

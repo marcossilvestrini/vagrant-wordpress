@@ -1,8 +1,8 @@
 ---
 galaxy_info:
   author: Marcos Silvestrini
-  description: Role for Wordpress
-  company: Silvestrini
+  description: Role for Mysql Database
+  company: Silvestrini .
   license: MIT
   min_ansible_version: 2.7
   platforms:
@@ -20,5 +20,4 @@ galaxy_info:
     - wordpress
     - mysql
     - development
-dependencies:
-  - webserver
+dependencies: []

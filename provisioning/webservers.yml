@@ -1,3 +1,4 @@
-- hosts: wordpress
+---
+- hosts: web
   roles:
     - wordpress

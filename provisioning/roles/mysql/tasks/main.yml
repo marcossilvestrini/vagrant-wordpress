@@ -25,8 +25,9 @@
     priv: '{{wp_db_name}}.*:ALL'
     state: present
     host: '{{ item }}'
-  with_items:
+  loop:
     - '{{ wp_host_ip }}'
+  no_log: true
 
 - name: 'Configure MySQL for Allow Remote Connections'
   copy:
