@@ -60,7 +60,7 @@
 
     clone this reposotory
     Generate your ssh pub key and copy to security folder
-    Switch your box in box. Default is Oracle Linux
+    Switch your box. Default is Oracle Linux
     cd vagrant-wordpress
     vagrant validate
     vagrant up

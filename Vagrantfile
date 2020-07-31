@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "mysql" do |mysql|
 
     # HOSTNAME
-    mysql.vm.hostname = "centos8-mysql"
+    mysql.vm.hostname = "ol-mysql"
 
     # NETWORK
     mysql.vm.network "public_network" ,ip: "192.168.0.134"
@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
       SHELL
 
     mysql.vm.provision "shell",inline: <<-SHELL
-      sudo yum update -y
+      # sudo yum update -y
       dnf install python3 -y
       SHELL
   end
@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "wordpress" do |wordpress|
 
     # HOSTNAME
-    wordpress.vm.hostname = "centos8-wordpress"
+    wordpress.vm.hostname = "ol-wordpress"
 
     # NETWORK
     wordpress.vm.network "public_network" ,ip: "192.168.0.135"
@@ -82,7 +82,7 @@ Vagrant.configure("2") do |config|
 
     # INSTALL UPDATES AND TOOLS
     wordpress.vm.provision "shell",inline: <<-SHELL
-      sudo yum update -y
+      # sudo yum update -y
       dnf install python3 -y
       SHELL
 

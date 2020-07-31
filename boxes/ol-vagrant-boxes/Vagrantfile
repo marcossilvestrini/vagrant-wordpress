@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
       SHELL
 
     mysql.vm.provision "shell",inline: <<-SHELL
-      sudo yum update -y
+      # sudo yum update -y
       dnf install python3 -y
       SHELL
   end
@@ -82,7 +82,7 @@ Vagrant.configure("2") do |config|
 
     # INSTALL UPDATES AND TOOLS
     wordpress.vm.provision "shell",inline: <<-SHELL
-      sudo yum update -y
+      # sudo yum update -y
       dnf install python3 -y
       SHELL
 
