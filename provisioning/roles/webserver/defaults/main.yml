@@ -1,0 +1,38 @@
+---
+packages:
+    - php
+    - php-cli
+    - php-common
+    - php-fpm
+    - php-dom
+    - php-simplexml
+    - php-xml
+    - php-xmlreader
+    - php-curl
+    - php-date
+    - php-exif
+    - php-filter
+    - php-ftp
+    - php-gd
+    - php-hash
+    - php-iconv
+    - php-json
+    - php-libxml
+    - php-pecl-imagick
+    - php-mbstring
+    - php-mysqlnd
+    - php-openssl
+    - php-pcre
+    - php-posix
+    - php-sockets
+    - php-spl
+    - php-tokenizer
+    - php-zlib
+    - httpd
+
+repos:
+  - https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+  - http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
+
+epel_key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+remi_key: http://rpms.remirepo.net/RPM-GPG-KEY-remi

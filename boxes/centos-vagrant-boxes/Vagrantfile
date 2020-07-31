@@ -125,8 +125,6 @@ Vagrant.configure("2") do |config|
       SHELL
 
     wordpress.vm.provision "ansible" do |ansible|
-      ansible.limit = "all"
-      ansible.inventory_path = "provisioning/hosts"
       ansible.playbook = "provisioning/site.yml"
 
     end

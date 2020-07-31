@@ -1,23 +1,21 @@
 ---
 - name: Install Epel and Rmi
   dnf:
-    name:
-      [
-        'https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm',
-        'http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm',
-      ]
+    name: '{{ item }}'
     state: installed
+  loop:
+    - '{{ repos }}'
   become: yes
 
 - name: Import EPEL GPG key.
   rpm_key:
-    key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+    key: '{{ epel_key }}'
     state: present
   become: yes
 
 - name: Import remi GPG key.
   rpm_key:
-    key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+    key: '{{ remi_key }}'
     state: present
   become: yes
 
@@ -27,39 +25,10 @@
 
 - name: Install Packages
   dnf:
-    state: installed
-    name:
-      [
-        'php',
-        'php-cli',
-        'php-common',
-        'php-fpm',
-        'php-dom',
-        'php-simplexml',
-        'php-xml',
-        'php-xmlreader',
-        'php-curl',
-        'php-date',
-        'php-exif',
-        'php-filter',
-        'php-ftp',
-        'php-gd',
-        'php-hash',
-        'php-iconv',
-        'php-json',
-        'php-libxml',
-        'php-pecl-imagick',
-        'php-mbstring',
-        'php-mysqlnd',
-        'php-openssl',
-        'php-pcre',
-        'php-posix',
-        'php-sockets',
-        'php-spl',
-        'php-tokenizer',
-        'php-zlib',
-        'httpd',
-      ]
+    name: '{{ item }}'
+    state: latest
+  loop:
+    - '{{ packages }}'
   become: yes
 
 - name: Change file ownership, group and permissions vagrant for php

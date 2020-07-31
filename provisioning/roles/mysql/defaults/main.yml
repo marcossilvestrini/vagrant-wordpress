@@ -2,3 +2,7 @@
 wp_host_ip:
   - localhost
   - '172.0.0.1'
+
+packages:
+  - mysql-server
+  - python3-PyMySQL

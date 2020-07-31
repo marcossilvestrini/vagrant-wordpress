@@ -9,6 +9,8 @@
 
     Virtual Box
     Vagrant
+    Ansible
+    Python3
 
 ## Authors
 
@@ -18,9 +20,12 @@
 
     This project is licensed under the MIT License - see the LICENSE.md file for details
 
-## Oficial Doc
+## References
 
+    https://www.virtualbox.org/wiki/Documentation
     https://www.vagrantup.com/docs/index.html
+    https://docs.ansible.com/
+    https://www.alura.com.br/formacao-devops
 
 ## Install Vagrant in Rhel Centos 7\8
 
@@ -34,11 +39,30 @@
     sudo yum localinstall vagrant_2.2.7_x86_64.rpm -y
     vagrant ––version
 
-## Create Box with Apache, Mysql Server and Wordpress
+## Project Structure
+
+### Boxes
+
+    Vagrantfile with distribution boxes. If you to change other SO, replace this file in .\Vagrantfile
+    Boxes this project: Centos 8 and Oracle Linux 8
+    Centos 8 box has a bug in virtualbox guest plugin,however there is a workaround solution applied to Vagrantfile, but this makes the provisioning of machines extremely slow!
+
+### Provisioning
+
+    Ansible structure with inventory, playbooks and roles. This structure is responsible for provisioning the infraestructure of project
+
+### Security
+
+    Important!!!
+    This structure is path for generate your ssh key pair.
+
+## Guide of Use
 
     clone this reposotory
     Generate your ssh pub key and copy to security folder
+    Switch your box in box. Default is Oracle Linux
     cd vagrant-wordpress
+    vagrant validate
     vagrant up
 
 ## Vagrantfile
@@ -62,8 +86,8 @@
 
 ### Role webserver
 
-    Set default repositories for download packages(Epel\RMI)
-    Install Apache , PHP and packages
+    Set default repositories for download packages(Epel\Remi)
+    Install Apache,PHP and packages
     Configure Apache and PHP
 
 ### Role wordpress

@@ -2,7 +2,9 @@
 - name: Install Packages
   dnf:
     state: installed
-    name: ['mysql-server', 'python3-PyMySQL']
+    name: '{{ item }}'
+  loop:
+    - '{{ packages }}'
   become: yes
 
 - name: Ensure Mysql is Running

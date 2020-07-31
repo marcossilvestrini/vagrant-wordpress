@@ -1,52 +1,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# https://github.com/dotless-de/vagrant-vbguest/issues/367
-# https://github.com/dotless-de/vagrant-vbguest/pull/373
-
-if defined?(VagrantVbguest)
-  class MyWorkaroundInstallerUntilPR373IsMerged < VagrantVbguest::Installers::CentOS
-    protected
-
-    def has_rel_repo?
-      unless instance_variable_defined?(:@has_rel_repo)
-        rel = release_version
-        @has_rel_repo = communicate.test(centos_8? ? 'yum repolist' : "yum repolist --enablerepo=C#{rel}-base --enablerepo=C#{rel}-updates")
-      end
-      @has_rel_repo
-    end
-
-    def centos_8?
-      release_version && release_version.to_s.start_with?('8')
-    end
-
-    def install_kernel_devel(opts=nil, &block)
-      if centos_8?
-        communicate.sudo('yum update -y kernel', opts, &block)
-        communicate.sudo('yum install -y kernel-devel', opts, &block)
-        communicate.sudo('shutdown -r now', opts, &block)
-
-        begin
-          sleep 10
-        end until @vm.communicate.ready?
-      else
-        rel = has_rel_repo? ? release_version : '*'
-        cmd = "yum install -y kernel-devel-`uname -r` --enablerepo=C#{rel}-base --enablerepo=C#{rel}-updates"
-        communicate.sudo(cmd, opts, &block)
-      end
-    end
-  end
-end
+# Box metadata location and box name
+BOX_URL = "https://oracle.github.io/vagrant-projects/boxes"
+BOX_NAME = "oraclelinux/8"
 
 Vagrant.configure("2") do |config|
-  config.vagrant.plugins = ['vagrant-vbguest']
-  config.vbguest.auto_update = true
-  config.vm.box = 'centos/8'
-  config.vm.box_url = 'https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-Vagrant-8.1.1911-20200113.3.x86_64.vagrant-virtualbox.box'
+  config.vm.box = BOX_NAME
+  config.vm.box_url = "#{BOX_URL}/#{BOX_NAME}.json"
 
-  if defined?(MyWorkaroundInstallerUntilPR373IsMerged)
-    config.vbguest.installer = MyWorkaroundInstallerUntilPR373IsMerged
-  end
 
   # VM mysql
   config.vm.define "mysql" do |mysql|
