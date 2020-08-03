@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
 
     # PROVIDER
     mysql.vm.provider "virtualbox" do |vb|
-      vb.name = "centos8-mysql"
+      vb.name = "ol-mysql"
       vb.memory = 2048
       vb.cpus = 1
     end
@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
 
     # PROVIDER
     wordpress.vm.provider "virtualbox" do |vb|
-      vb.name = "centos8-wordpress"
+      vb.name = "ol-wordpress"
       vb.memory = 1024
       vb.cpus = 1
     end
