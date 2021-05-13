@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
     mysql.vm.hostname = "ol-mysql"
 
     # NETWORK
-    mysql.vm.network "public_network" ,ip: "192.168.0.134"
+    mysql.vm.network "public_network" ,ip: "192.168.0.134", mode: "bridge" , bridge: "ens32"
     mysql.vm.network "forwarded_port", guest: 3306, host: 3306, adapter: 1 , guest_ip: "192.168.0.134" ,host_ip: "192.168.0.33"
 
     # MOUNTS
@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
     wordpress.vm.hostname = "ol-wordpress"
 
     # NETWORK
-    wordpress.vm.network "public_network" ,ip: "192.168.0.135"
+    wordpress.vm.network "public_network" ,ip: "192.168.0.135" ,mode: "bridge" , bridge: "ens32"
     wordpress.vm.network "forwarded_port", guest: 80, host: 8080, adapter: 1 , guest_ip: "192.168.0.135" ,host_ip: "192.168.0.33"
 
     # MOUNTS
