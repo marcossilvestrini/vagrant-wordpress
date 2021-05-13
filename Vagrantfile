@@ -38,6 +38,7 @@ Vagrant.configure("2") do |config|
 
     # PROVIDER
     mysql.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
       vb.name = "ol-mysql"
       vb.memory = 2048
       vb.cpus = 1
@@ -76,6 +77,7 @@ Vagrant.configure("2") do |config|
 
     # PROVIDER
     wordpress.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
       vb.name = "ol-wordpress"
       vb.memory = 1024
       vb.cpus = 1
